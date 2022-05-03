@@ -2,6 +2,8 @@
 
 
 #include "InGamePlayerController.h"
+
+#include "ChaosInterfaceWrapperCore.h"
 #include "Inputable.h"
 #include "PlayerCharacter.h"
 #include "GameFramework/GameModeBase.h"
@@ -77,8 +79,28 @@ void AInGamePlayerController::Handle_MatchEnded_Implementation()
 	//SetInputMode(FInputModeUIOnly());
 }
 
+void AInGamePlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//CreateHUD();
+}
+
+bool AInGamePlayerController::CreateHUD()
+{
+	m_HUDInstance = Cast<UUserWidget_InGameHUD>(CreateWidget(this, m_HUDBase, TEXT("HUDInstance")));
+	if (m_HUDInstance->IsValidLowLevel() == false) { return false; }
+	
+	m_HUDInstance->AddToViewport();
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Created HUD.")));
+
+	return true;
+}
+
 void AInGamePlayerController::PausePressed()
 {
+	//CreateHUD();
 	m_GameMode->PauseGame(this, !IsPaused());
 }
 
@@ -148,6 +170,7 @@ void AInGamePlayerController::Link1Pressed()
 		IInputable::Execute_Link1Pressed(pawn);
 	}
 	if (m_HUD != nullptr) { m_HUD->SetLink1Active(true); }
+	if (m_HUDInstance != nullptr) { m_HUDInstance->SetLink1Active(true); }
 }
 
 void AInGamePlayerController::Link1Released()
@@ -158,6 +181,7 @@ void AInGamePlayerController::Link1Released()
 		IInputable::Execute_Link1Released(pawn);
 	}
 	if (m_HUD != nullptr) { m_HUD->SetLink1Active(false); }
+	if (m_HUDInstance != nullptr) { m_HUDInstance->SetLink1Active(false); }
 }
 
 void AInGamePlayerController::Link2Pressed()
@@ -168,6 +192,7 @@ void AInGamePlayerController::Link2Pressed()
 		IInputable::Execute_Link2Pressed(pawn);
 	}
 	if (m_HUD != nullptr) { m_HUD->SetLink2Active(true); }
+	if (m_HUDInstance != nullptr) { m_HUDInstance->SetLink2Active(true); }
 }
 
 void AInGamePlayerController::Link2Released()
@@ -178,6 +203,7 @@ void AInGamePlayerController::Link2Released()
 		IInputable::Execute_Link2Released(pawn);
 	}
 	if (m_HUD != nullptr) { m_HUD->SetLink2Active(false); }
+	if (m_HUDInstance != nullptr) { m_HUDInstance->SetLink2Active(false); }
 }
 
 void AInGamePlayerController::MoveForward(float _value)

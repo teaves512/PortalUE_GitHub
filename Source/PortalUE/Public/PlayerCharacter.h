@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Inputable.h"
 #include "LinkMarker.h"
+#include "UserWidget_InGameHUD.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 

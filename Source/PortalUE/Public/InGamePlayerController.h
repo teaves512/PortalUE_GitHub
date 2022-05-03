@@ -31,7 +31,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	UUserWidget_InGameHUD* m_HUD;
 
+	UPROPERTY(EditAnywhere, Category="HUD")
+	TSubclassOf<UUserWidget_InGameHUD> m_HUDBase;
+	UUserWidget_InGameHUD* m_HUDInstance;
+
 protected:
+	virtual void BeginPlay() override;
+	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<APawn> PawnToSpawn;
 
@@ -39,6 +45,8 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category="HUD")
 	void ShowHUD();
+
+	bool CreateHUD();
 
 private:
 	void PausePressed(); void PauseReleased();
